@@ -380,13 +380,13 @@ def random_button_text():
     return random_buttons[random.randint(0, len(random_buttons)-1)]
 
 def show_upgrade_popup():
-    global popup, ran_but, ran_but_text, ran_but_rects, rel_but_rect, popup_rect, popup_x, popup_y
+    global popup, ran_but_text, ran_but_rects, rel_but_rect, popup_rect, popup_x, popup_y
 
     popup = pygame_gui.windows.UIConfirmationDialog(
         rect=pygame.Rect((screen_width//2, screen_height//2), (700, 200)),
         manager=manager,
         window_title="Ulepszenia",
-        action_long_desc="Wybierz ulepszenia postaci:",
+        action_long_desc="Wybierz ulepszenia postaci:"
     )
 
     popup_rect = popup.get_relative_rect()
@@ -411,9 +411,6 @@ def show_upgrade_popup():
         ran_but.append(button)
         ran_but_text.append(atext)
         pop_button_x += 200
-
-show_upgrade_popup()
-popup.kill()
 
 #tutorial
 
@@ -492,7 +489,6 @@ clock = pygame.time.Clock()
 
 #game loop
 
-popup_open = False
 buttons_active = True
 running = True
 menu = True
@@ -554,10 +550,6 @@ while running:
                 text = font.render(settings_button_texts[i], True, (0,0,0))
                 text_rect = text.get_rect(center=settings_button_rect.center)
                 screen.blit(text, text_rect)
-            
-            manager.process_events(event)
-            manager.update(0.2)
-            manager.draw_ui(screen)
 
             pygame.display.update()
             pygame.display.flip()
@@ -598,11 +590,16 @@ while running:
             sbsort.sort()
 
             topscores = []
+            top = 0
+            if len(sbsort) >= 3:
+                top = 3
+            else:
+                top = len(sbsort)
 
-            for i in range(1, 4):
+            for i in range(1, top+1):
                 topscores.append(sbsort[-i])
 
-            for i in range(3):
+            for i in range(top):
                 sbrect = pygame.Rect(screen_width//2-150, screen_height//4+i*100, 300, 75)
                 pygame.draw.rect(screen, (0,0,0), sbrect)
 
@@ -622,10 +619,6 @@ while running:
             text = font.render("Powrót", True, (0,0,0))
             text_rect = text.get_rect(center=scoreboard_button_rect.center)
             screen.blit(text, text_rect)
-            
-            manager.process_events(event)
-            manager.update(0.2)
-            manager.draw_ui(screen)
 
             pygame.display.update()
             pygame.display.flip()
@@ -678,10 +671,6 @@ while running:
             text = font.render("Powrót", True, (0,0,0))
             text_rect = text.get_rect(center=tutorial_button_rect.center)
             screen.blit(text, text_rect)
-            
-            manager.process_events(event)
-            manager.update(0.2)
-            manager.draw_ui(screen)
 
             pygame.display.update()
             pygame.display.flip()
@@ -696,6 +685,7 @@ while running:
                     if is_clicked(mouse_pos, menu_button_rect):
                         if menu_button_texts[i] == "Graj":
                             menu = False
+                            show_upgrade_popup()
                             playmusic('music/TitleTheme_PhoneHome_Loopable.wav')
                         elif menu_button_texts[i] == "Tutorial":
                             tutorial = True
@@ -743,10 +733,6 @@ while running:
             text = font.render(menu_button_texts[i], True, (0,0,0))
             text_rect = text.get_rect(center=menu_button_rect.center)
             screen.blit(text, text_rect)
-        
-        manager.process_events(event)
-        manager.update(0.2)
-        manager.draw_ui(screen)
 
         pygame.display.update()
         pygame.display.flip()
@@ -1169,9 +1155,8 @@ while running:
 
     #manager
 
-    manager = pygame_gui.UIManager((screen_width,screen_height))
     manager.process_events(event)
-    manager.update(0.2)
+    manager.update(60)
     manager.draw_ui(screen)
 
     #ekran
@@ -1185,6 +1170,7 @@ while running:
     if dead:
 
         pygame.mixer_music.stop()
+        popup.kill()
 
         end_text = font.render("Game Over :)", True, (255,255,255))
         death_text = font.render(death_text, True, (255,255,255))
@@ -1201,10 +1187,14 @@ while running:
             hs = ""
             hs_text = ""
             pr = plik.readlines()
-            for i in range(len(pr)):
-                if pr[i] > hs:
-                    hs = pr[i]
-            if rekord > hs:
+            if pr != "":
+                for i in range(len(pr)):
+                    if pr[i] > hs:
+                        hs = pr[i]
+                if rekord > hs:
+                    hs_text = font.render("High Score!!!", True, (255,255,255))
+                    screen.blit(hs_text, (screen_width//2-end_text.get_width()//2,screen_height//2-75))
+            else:
                 hs_text = font.render("High Score!!!", True, (255,255,255))
                 screen.blit(hs_text, (screen_width//2-end_text.get_width()//2,screen_height//2-75))
         if len(pr) > 0:
@@ -1239,7 +1229,6 @@ while running:
         death_text = ""
         menu = True
         dead = False
-        popup_open = False
         buttons_active = True
         playmusic('music/SeeingDouble_Loopable.wav')
 
