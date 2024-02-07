@@ -1,7 +1,7 @@
-To jest gra na projekt z wprowadzenia do programowania.
+This game is a school project.
 
-W tej grze gra się magiem i walczy się z potworami. Trzeba zarządzać surowcami amy przetrwać. Pokonując stworzenia przechodzi się po pokojach i poziomach. Walka jest turn-based.
+In this game you are a cleric and you fight monsters. You need to manage resources to survive. Defeating rooms of enemies you go to further levels. Fighting is turn-based.
 
-Na górze ekranu są informacje o rozgrywce. Na dole są przyciski którymi gracz wykonuje akcje aby pokonać potwory. Po lewej jest postać gracza a po środku kolejni przeciwnicy.
+I recommend reading the in-game tutorial before playing.
 
-Po oddaniu projektu planuję przetłumaczyć grę na angielski.
+This game has been translated from polish to english.
